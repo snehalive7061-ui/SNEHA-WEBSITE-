@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneha Gaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f8f9fa; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 450px; background: white; min-height: 100vh; padding-bottom: 20px; }
+        
+        /* Header style based on "Guide Gamer" screenshot */
+        header { 
+            background: linear-gradient(to bottom, #ffbd8a, #ffffff); 
+            padding: 25px 0; 
+            text-align: center; 
+            font-family: 'Great Vibes', cursive; 
+            font-size: 42px; 
+            color: #000;
+        }
+        
+        /* Navigation (ASSETS replaced with MAPS) */
+        .nav-buttons { display: flex; justify-content: space-evenly; padding: 15px 0; border-bottom: 1px solid #f2f2f2; }
+        .nav-btn { padding: 8px 35px; border-radius: 20px; border: 1px solid #ddd; text-decoration: none; color: #333; font-weight: bold; font-size: 14px; }
+
+        /* Social Buttons */
+        .btn-link { display: flex; align-items: center; margin: 10px 20px; padding: 14px 15px; border-radius: 12px; color: white; text-decoration: none; font-weight: 600; justify-content: space-between; }
+        .yt { background-color: #e62117; }
+        .ig { background-color: #e1306c; }
+        .wa { background-color: #25d366; }
+        .tg { background-color: #0088cc; }
+        .dc { background-color: #5865F2; }
+        
+        .action-text { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 8px; font-size: 12px; }
+
+        /* Map Section Card */
+        .map-card { background: #ffffff; margin: 20px; padding: 15px; border-radius: 15px; border: 1px solid #eee; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .map-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .map-img { width: 100%; border-radius: 12px; display: block; border: 1px solid #f0f0f0; }
+        .copy-code-btn { background: white; border: 1px solid #ddd; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; margin-bottom: 5px; display: block; width: 100%; text-align: center; font-weight: bold; }
+        
+        .user-info { display:flex; gap:10px; align-items:center; }
+        .user-icon { background:#e62117; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>Sneha Gaming</header>
+
+    <div class="nav-buttons">
+        <a href="#" class="nav-btn">HOME</a>
+        <a href="#" class="nav-btn">MAPS</a> </div>
+
+    <a href="https://yt.openinapp.co/53tis" class="btn-link yt">
+        <span><i class="fab fa-youtube"></i> YouTube</span>
+        <span class="action-text">Subscribe</span>
+    </a>
+
+    <a href="https://www.instagram.com/snehaa_gaming1" class="btn-link ig">
+        <span><i class="fab fa-instagram"></i> Instagram</span>
+        <span class="action-text">Follow</span>
+    </a>
+
+    <a href="https://whatsapp.com/channel/0029Vb6syM9002T2hFCwFZ3T" class="btn-link wa">
+        <span><i class="fab fa-whatsapp"></i> WhatsApp</span>
+        <span class="action-text">Join</span>
+    </a>
+
+    <a href="https://t.me/craftlandsnehaa" class="btn-link tg">
+        <span><i class="fab fa-telegram"></i> Telegram</span>
+        <span class="action-text">Join</span>
+    </a>
+
+    <a href="https://discord.gg/TBF54EWB5" class="btn-link dc">
+        <span><i class="fab fa-discord"></i> Discord</span>
+        <span class="action-text">Join</span>
+    </a>
+
+    <hr style="margin: 20px; border: 0; border-top: 1px solid #f0f0f0;">
+
+    <div class="map-card">
+        <div class="map-top">
+            <div class="user-info">
+                <div class="user-icon">SACSO</div>
+                <div>
+                    <b style="font-size:16px;">Break Run</b><br>
+                    <small style="color:#888;">10 July 2025</small>
+                </div>
+            </div>
+            <div style="min-width: 95px;">
+                <button class="copy-code-btn" onclick="alert('Code Copied!')">🇮🇳 Code <i class="far fa-copy"></i></button>
+                <button class="copy-code-btn" onclick="alert('Code Copied!')">Other Code <i class="far fa-copy"></i></button>
+            </div>
+        </div>
+        <img src="map_image.jpg" class="map-img" alt="Map Preview">
+    </div>
+
+</div>
+
+</body>
+</html>
