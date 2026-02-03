@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sneha Gaming — Links</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --radius:14px;
+      --gap:18px;
+      --maxw:720px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Inter,system-ui,Roboto,Arial;
+      background:#fff;
+      color:#111;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 16px;
+    }
+    .wrap{width:100%;max-width:var(--maxw);display:flex;flex-direction:column;align-items:center;gap:28px}
+
+    /* Header */
+    .header{
+      width:100%;
+      background:linear-gradient(180deg,#ffd7c0,#fff6f1);
+      padding:28px 20px;
+      border-radius:18px;
+      text-align:center;
+      box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+    .title{
+      font-family:'Great Vibes',cursive;
+      font-size:56px;
+      color:#2b1a14;
+    }
+    .subtitle{margin-top:6px;font-size:14px;color:#6b5a55}
+
+    /* Buttons */
+    .list{width:100%;display:flex;flex-direction:column;gap:var(--gap)}
+    .card{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px;border-radius:var(--radius);color:#fff;
+      text-decoration:none;box-shadow:0 10px 18px rgba(0,0,0,.12);
+      transition:transform .15s ease;
+      min-height:68px;
+    }
+    .card:active{transform:translateY(1px)}
+    .left{display:flex;align-items:center;gap:14px}
+    .label{font-size:20px;font-weight:600;letter-spacing:1px}
+    .right{font-size:15px;opacity:.95}
+
+    .youtube{background:#e02020}
+    .instagram{background:linear-gradient(90deg,#e9406a,#f27121)}
+    .telegram{background:#1e9ad6}
+    .whatsapp{background:#25d366}
+    .discord{background:#5865f2}
+
+    /* Footer */
+    .footer{text-align:center;margin-top:6px}
+    .created{font-size:15px;margin-top:6px}
+    .created a{color:#0756d6;text-decoration:none;font-weight:600}
+    .brand{
+      margin-top:12px;padding:12px 0;border-radius:12px;
+      background:linear-gradient(180deg,#ff5d4d,#ffac9a);
+      color:#fff;font-weight:700;letter-spacing:2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="header">
+      <h1 class="title">Sneha Gaming</h1>
+      <div class="subtitle">Follow me on social media</div>
+    </header>
+
+    <main class="list">
+
+      <a class="card youtube" href="https://yt.openinapp.co/7b8iy" target="_blank" rel="noopener">
+        <div class="left"><div class="label">YouTube</div></div>
+        <div class="right">Subscribe</div>
+      </a>
+
+      <a class="card instagram" href="https://www.instagram.com/snehaa_gaming1?igsh=Z3BtazAycmJrMmZ4" target="_blank" rel="noopener">
+        <div class="left"><div class="label">Instagram</div></div>
+        <div class="right">Follow</div>
+      </a>
+
+      <a class="card telegram" href="https://t.me/craftlandsnehaa" target="_blank" rel="noopener">
+        <div class="left"><div class="label">Telegram</div></div>
+        <div class="right">Ask Here</div>
+      </a>
+
+      <a class="card whatsapp" href="https://whatsapp.com/channel/0029Vb6syM9002T2hFCwFZ3T" target="_blank" rel="noopener">
+        <div class="left"><div class="label">WhatsApp</div></div>
+        <div class="right">Follow</div>
+      </a>
+
+      <a class="card discord" href="https://discord.gg/TBF54EWB5" target="_blank" rel="noopener">
+        <div class="left"><div class="label">Discord</div></div>
+        <div class="right">Join</div>
+      </a>
+
+    </main>
+
+    <footer class="footer">
+      <div class="created">Created with ❤️ by <strong>Sneha Gaming</strong></div>
+      <div class="brand">CRAFTLAND</div>
+    </footer>
+
+  </div>
+</body>
+  </html>
