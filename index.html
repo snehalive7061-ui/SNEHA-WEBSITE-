@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sneha Gaming Official</title>
+
+  <!-- Styles (site + theme controls) -->
+  <style>
+    /* ===========================
+       Basic site styles (your original)
+       =========================== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      overflow: hidden;
+      background: #000; /* fallback while 3D loads */
+    }
+
+    /* Canvas (3D background) sits below content */
+    #container canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+    }
+
+    /* Foreground content must be above canvas */
+    .foreground {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      pointer-events: auto;
+    }
+
+    /* Header */
+    .header-top {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+      padding: 18px 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+      z-index: 12;
+    }
+    .nav-btn {
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 14px;
+      border: 2px solid rgba(255,255,255,0.14);
+      font-size: 16px;
+      color: #fff;
+      transition: all .25s ease;
+      background: rgba(0,0,0,0.25);
+    }
+    .nav-btn.home-btn { background:#1e90ff; color:#fff; border-color: rgba(255,255,255,0.25); }
+    .nav-btn:hover { transform: translateY(-3px); background:#fff; color:#1e90ff; }
+
+    /* Logo area */
+    .logo-container { margin: 36px 0 16px; z-index:11; position:relative; }
+    .main-logo {
+      width: 200px; height:200px; border-radius:50%;
+      object-fit:cover; border:5px solid #fff;
+      box-shadow: 0 0 30px rgba(0,0,0,0.7);
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .main-logo:hover { transform: scale(1.04); }
+
+    /* Buttons container */
+    .container {
+      padding: 20px;
+      max-width: 480px;
+      margin: 10px auto 60px;
+      position: relative;
+      z-index: 11;
+    }
+    .social-btn {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 20px; margin:12px 0; border-radius:14px;
+      color:#fff; text-decoration:none; font-weight:700; font-size:18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+      transition: transform .25s ease;
+    }
+    .social-btn:hover { transform: translateY(-5px); }
+    .social-btn span { font-size:14px; opacity:0.95; }
+
+    .yt { background:#e62117; }
+    .ig { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+    .tg { background:#24a1de; }
+    .wa { background:#25d366; }
+    .ds { background:#5865f2; }
+
+    /* ================================
+       Theme controls UI (top-right floating)
+       ================================ */
+    #controls {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding:10px 14px;
+      border-radius: 14px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      font-size:13px;
+    }
+    .theme-btn, .action-btn {
+      padding:6px 10px; border-radius:10px;
+      background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.06);
+      color:#fff; cursor:pointer; font-weight:600;
+    }
+    .theme-btn.active, .action-btn.active { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.14); }
+    .toggle-switch { width:44px; height:22px; background: rgba(255,255,255,0.08); border-radius:22px; position:relative; display:inline-block; }
+    .toggle-switch input { display:none; }
+    .toggle-slider { position:absolute; left:3px; top:3px; width:16px; height:16px; background:white; border-radius:50%; transition:transform .2s ease; }
+    .toggle-switch input:checked + .toggle-slider { transform: translateX(22px); }
+
+    /* Small screens */
+    @media (max-width:480px){
+      .main-logo { width:160px; height:160px; }
+      .container { max-width:360px; }
+      .nav-btn { padding:8px 14px; font-size:15px; }
+    }
+
+    /* Optional subtle glow behind logo (makes it pop) */
+    .logo-glow {
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      top: 56px;
+      width: 320px;
+      height: 320px;
+      border-radius:50%;
+      filter: blur(28px);
+      z-index:9;
+      pointer-events:none;
+      mix-blend-mode: screen;
+      background: radial-gradient(circle at 50% 50%, rgba(60,160,255,0.15), transparent 40%);
+      opacity:0.9;
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D canvas container (renderer will attach here) -->
+  <div id="container" aria-hidden="true"></div>
+
+  <!-- Foreground content (logo, buttons) -->
+  <div class="foreground">
+    <div class="header-top">
+      <a class="nav-btn home-btn" href="#">HOME</a>
+      <a class="nav-btn maps-btn" href="maps.html">MAPS</a>
+    </div>
+
+    <div class="logo-container">
+      <div class="logo-glow"></div>
+      <img src="logo.png" alt="Sneha Logo" class="main-logo" />
+    </div>
+
+    <div class="container">
+      <a class="social-btn yt" href="https://yt.openinapp.co/7b8iy" target="_blank">YouTube <span>Subscribe</span></a>
+      <a class="social-btn ig" href="https://insta.openinapp.co/2he0d" target="_blank">Instagram <span>Follow</span></a>
+      <a class="social-btn tg" href="https://t.me/craftlandsnehaa" target="_blank">Telegram <span>Ask Here</span></a>
+      <a class="social-btn wa" href="https://whatsapp.com/channel/0029Vb6syM9002T2hFCwFZ3T" target="_blank">WhatsApp <span>Follow</span></a>
+      <a class="social-btn ds" href="https://discord.gg/TBF54EWB5" target="_blank">Discord <span>Join</span></a>
+    </div>
+  </div>
+
+  <!-- Controls (theme + morph + animate toggle) -->
+  <div id="controls" aria-hidden="false">
+    <div id="theme-selector">
+      <button class="theme-btn" data-theme="molten">Molten</button>
+      <button class="theme-btn" data-theme="cosmic">Cosmic</button>
+      <button class="theme-btn" data-theme="emerald">Emerald</button>
+    </div>
+
+    <div style="width:1px; height:28px; background:rgba(255,255,255,0.06); margin:0 8px;"></div>
+
+    <button id="morphBtn" class="action-btn">Morph</button>
+
+    <div style="width:1px; height:28px; background:rgba(255,255,255,0.06); margin:0 8px;"></div>
+
+    <label style="display:flex; align-items:center; gap:8px; font-weight:600;">
+      <span style="font-size:13px;">Animate</span>
+      <label class="toggle-switch">
+        <input id="animateToggle" type="checkbox" checked />
+        <span class="toggle-slider"></span>
+      </label>
+    </label>
+  </div>
+
+  <!-- Three.js module script (animation) -->
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js';
+    import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+    import { OutputPass } from 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/postprocessing/OutputPass.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/controls/OrbitControls.js';
+
+    // ---- Config & globals ----
+    const particleCount = 10000;
+    let scene, camera, renderer, composer, controls;
+    let particles;
+    let time = 0;
+    let isAnimationEnabled = true;
+    let morphTarget = 0;
+    let morphProgress = 0;
+    let currentTheme = 'molten';
+
+    const themes = {
+      molten: {
+        name: 'Molten',
+        colors: [ new THREE.Color(0xff4800), new THREE.Color(0xff8c00), new THREE.Color(0xd73a00), new THREE.Color(0x3d1005), new THREE.Color(0xffc600) ],
+        bloom: { strength: 0.35, radius: 0.45, threshold: 0.7 }
+      },
+      cosmic: {
+        name: 'Cosmic',
+        colors: [ new THREE.Color(0x6a0dad), new THREE.Color(0x9370db), new THREE.Color(0x4b0082), new THREE.Color(0x8a2be2), new THREE.Color(0xdda0dd) ],
+        bloom: { strength: 0.4, radius: 0.5, threshold: 0.65 }
+      },
+      emerald: {
+        name: 'Emerald',
+        colors: [ new THREE.Color(0x00ff7f), new THREE.Color(0x3cb371), new THREE.Color(0x2e8b57), new THREE.Color(0x00fa9a), new THREE.Color(0x98fb98) ],
+        bloom: { strength: 0.3, radius: 0.6, threshold: 0.75 }
+      }
+    };
+
+    // ---- helpers: shape paths ----
+    function createStarPath(i, total) {
+      const numStarPoints = 5;
+      const outer = 35;
+      const inner = 15;
+      const verts = [];
+      for (let p = 0; p < numStarPoints; p++) {
+        let a = (p / numStarPoints) * Math.PI * 2 - Math.PI / 2;
+        verts.push(new THREE.Vector2(outer * Math.cos(a), outer * Math.sin(a)));
+        a += Math.PI / numStarPoints;
+        verts.push(new THREE.Vector2(inner * Math.cos(a), inner * Math.sin(a)));
+      }
+      const numSeg = verts.length;
+      const t_path = (i / total) * numSeg;
+      const seg = Math.floor(t_path) % numSeg;
+      const prog = t_path - Math.floor(t_path);
+      const s = verts[seg];
+      const e = verts[(seg + 1) % numSeg];
+      const x = THREE.MathUtils.lerp(s.x, e.x, prog);
+      const y = THREE.MathUtils.lerp(s.y, e.y, prog);
+      const z = Math.sin((i / total) * Math.PI * 4) * 4;
+      return new THREE.Vector3(x + (Math.random()-0.5)*0.2, y + (Math.random()-0.5)*0.2, z + (Math.random()-0.5)*0.2);
+    }
+
+    function createHeartPath(i, total) {
+      const t = (i / total) * Math.PI * 2;
+      const scale = 2.2;
+      let x = 16 * Math.pow(Math.sin(t), 3);
+      let y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+      const z = Math.sin(t*4) * 2;
+      return new THREE.Vector3(x*scale + (Math.random()-0.5)*0.2, y*scale + (Math.random()-0.5)*0.2, z + (Math.random()-0.5)*0.2);
+    }
+
+    // ---- init scene ----
+    function init() {
+      // scene / camera / renderer
+      scene = new THREE.Scene();
+      const canvasContainer = document.getElementById('container');
+      camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1500);
+      camera.position.z = 90;
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      canvasContainer.appendChild(renderer.domElement);
+
+      // orbit (gentle) for subtle parallax if you like
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.enablePan = false;
+      controls.enableZoom = false;
+      controls.enableRotate = false;
+
+      // composer + bloom
+      composer = new EffectComposer(renderer);
+      composer.addPass(new RenderPass(scene, camera));
+      const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.4, 0.85);
+      composer.addPass(bloom);
+      composer.addPass(new OutputPass());
+      scene.userData.bloomPass = bloom;
+
+      createParticleSystem();
+      bindUI();
+      setTheme(currentTheme);
+
+      window.addEventListener('resize', onResize);
+      animate();
+    }
+
+    // ---- create particle system ----
+    function createParticleSystem(){
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+      const sizes = new Float32Array(particleCount);
+      const starPosArr = new Float32Array(particleCount * 3);
+      const heartPosArr = new Float32Array(particleCount * 3);
+      const disOffsets = new Float32Array(particleCount * 3);
+
+      for (let i=0;i<particleCount;i++){
+        const i3 = i*3;
+        const s = createStarPath(i, particleCount);
+        const h = createHeartPath(i, particleCount);
+        positions[i3] = s.x; positions[i3+1] = s.y; positions[i3+2] = s.z;
+        starPosArr[i3] = s.x; starPosArr[i3+1] = s.y; starPosArr[i3+2] = s.z;
+        heartPosArr[i3] = h.x; heartPosArr[i3+1] = h.y; heartPosArr[i3+2] = h.z;
+
+        const attrs = getAttributesForParticle(i);
+        colors[i3] = attrs.color.r; colors[i3+1] = attrs.color.g; colors[i3+2] = attrs.color.b;
+        sizes[i] = attrs.size;
+
+        const offsetStrength = 30 + Math.random()*40;
+        const phi = Math.random()*Math.PI*2;
+        const theta = Math.acos(2*Math.random()-1);
+        disOffsets[i3] = Math.sin(theta)*Math.cos(phi)*offsetStrength;
+        disOffsets[i3+1] = Math.sin(theta)*Math.sin(phi)*offsetStrength;
+        disOffsets[i3+2] = Math.cos(theta)*offsetStrength*0.5;
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+      geometry.setAttribute('starPosition', new THREE.BufferAttribute(starPosArr, 3));
+      geometry.setAttribute('heartPosition', new THREE.BufferAttribute(heartPosArr, 3));
+      geometry.setAttribute('disintegrationOffset', new THREE.BufferAttribute(disOffsets, 3));
+
+      // point material - use additive to glow
+      const sprite = createParticleTexture();
+      const material = new THREE.PointsMaterial({
+        size: 2.8,
+        map: sprite,
+        vertexColors: true,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        sizeAttenuation: true,
+        alphaTest: 0.01
+      });
+
+      particles = new THREE.Points(geometry, material);
+      scene.add(particles);
+    }
+
+    // color/size for particle
+    function getAttributesForParticle(i){
+      const t = i / particleCount;
+      const palette = themes[currentTheme].colors;
+      const colorProgress = (t * palette.length * 1.5 + time * 0.05) % palette.length;
+      const idx1 = Math.floor(colorProgress);
+      const idx2 = (idx1 + 1) % palette.length;
+      const blend = colorProgress - idx1;
+      const c1 = palette[idx1], c2 = palette[idx2];
+      const base = new THREE.Color().lerpColors(c1, c2, blend);
+      const color = base.clone().multiplyScalar(0.65 + Math.random()*0.55);
+      const size = 0.65 + Math.random() * 0.6;
+      return { color, size };
+    }
+
+    // small star-shaped sprite
+    function createParticleTexture(){
+      const size = 64;
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const cx = size/2, cy = size/2;
+      const outer = size*0.45, inner = size*0.20, points = 5;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - outer);
+      for (let i=0;i<points;i++){
+        const ang = (i/points)*Math.PI*2 - Math.PI/2;
+        ctx.lineTo(cx + outer*Math.cos(ang), cy + outer*Math.sin(ang));
+        const ang2 = ang + Math.PI/points;
+        ctx.lineTo(cx + inner*Math.cos(ang2), cy + inner*Math.sin(ang2));
+      }
+      ctx.closePath();
+      const grad = ctx.createRadialGradient(cx,cy,0,cx,cy,outer);
+      grad.addColorStop(0, 'rgba(255,255,255,1)');
+      grad.addColorStop(0.3, 'rgba(255,255,220,0.9)');
+      grad.addColorStop(0.6, 'rgba(255,200,150,0.6)');
+      grad.addColorStop(1, 'rgba(255,150,0,0)');
+      ctx.fillStyle = grad;
+      ctx.fill();
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    // animate particles: morphing + disintegration cycle
+    function animateParticles() {
+      if (!particles || !isAnimationEnabled) return;
+      const pos = particles.geometry.attributes.position.array;
+      const star = particles.geometry.attributes.starPosition.array;
+      const heart = particles.geometry.attributes.heartPosition.array;
+      const cols = particles.geometry.attributes.color.array;
+      const sizes = particles.geometry.attributes.size.array;
+      const disOffsets = particles.geometry.attributes.disintegrationOffset.array;
+
+      morphProgress += (morphTarget - morphProgress) * 0.04;
+
+      for (let i=0;i<particleCount;i++){
+        const i3 = i*3;
+        const homeX = THREE.MathUtils.lerp(star[i3], heart[i3], morphProgress);
+        const homeY = THREE.MathUtils.lerp(star[i3+1], heart[i3+1], morphProgress);
+        const homeZ = THREE.MathUtils.lerp(star[i3+2], heart[i3+2], morphProgress);
+
+        // disintegration cycle
+        const cycle = 20.0;
+        const particleOffset = (i/particleCount) * cycle * 0.5;
+        const prog = ((time*0.6 + particleOffset) % cycle)/cycle;
+        let disAmt = 0;
+        const stableEnd = 0.5;
+        const disStart = stableEnd;
+        const disFull = stableEnd + 0.15;
+        const holdEnd = disFull + 0.1;
+
+        if (prog < stableEnd) disAmt = 0;
+        else if (prog < disFull) disAmt = (prog - disStart) / (disFull - disStart);
+        else if (prog < holdEnd) disAmt = 1.0;
+        else disAmt = 1.0 - (prog - holdEnd)/(1.0 - holdEnd);
+
+        disAmt = Math.sin(disAmt * Math.PI * 0.5);
+
+        let tx = homeX, ty = homeY, tz = homeZ;
+        let factor = 0.085;
+        if (disAmt > 0.001) {
+          tx = homeX + disOffsets[i3] * disAmt;
+          ty = homeY + disOffsets[i3+1] * disAmt;
+          tz = homeZ + disOffsets[i3+2] * disAmt;
+          factor = 0.045 + disAmt*0.02;
+        }
+
+        pos[i3] += (tx - pos[i3]) * factor;
+        pos[i3+1] += (ty - pos[i3+1]) * factor;
+        pos[i3+2] += (tz - pos[i3+2]) * factor;
+
+        const attrs = getAttributesForParticle(i);
+        let brightness = (0.65 + Math.sin((i/particleCount)*Math.PI*7 + time*1.3)*0.35)*(1 - disAmt*0.75);
+        brightness *= 0.85 + Math.sin(time*7 + i*0.5)*0.15;
+
+        cols[i3] = attrs.color.r * brightness;
+        cols[i3+1] = attrs.color.g * brightness;
+        cols[i3+2] = attrs.color.b * brightness;
+
+        let curSize = attrs.size * (1 - disAmt*0.9);
+        curSize *= 0.8 + Math.sin(time*5 + i*0.3)*0.2;
+        sizes[i] = Math.max(0.05, curSize);
+      }
+
+      particles.geometry.attributes.position.needsUpdate = true;
+      particles.geometry.attributes.color.needsUpdate = true;
+      particles.geometry.attributes.size.needsUpdate = true;
+    }
+
+    // UI bindings
+    function bindUI(){
+      // theme buttons
+      document.querySelectorAll('.theme-btn').forEach(btn=>{
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          setTheme(btn.dataset.theme);
+        });
+      });
+
+      // default active
+      document.querySelector('.theme-btn[data-theme="'+currentTheme+'"]').classList.add('active');
+
+      // morph button
+      const morphBtn = document.getElementById('morphBtn');
+      morphBtn.addEventListener('click', () => {
+        morphBtn.classList.toggle('active');
+        morphTarget = morphTarget === 0 ? 1 : 0;
+      });
+
+      // animate toggle
+      const toggle = document.getElementById('animateToggle');
+      toggle.addEventListener('change', (e) => { isAnimationEnabled = e.target.checked; });
+
+      // small pointer parallax: rotate scene slowly on mousemove (subtle)
+      window.addEventListener('mousemove', (e) => {
+        const nx = (e.clientX / window.innerWidth) - 0.5;
+        const ny = (e.clientY / window.innerHeight) - 0.5;
+        // move camera slightly
+        camera.position.x += (nx * 6 - camera.position.x) * 0.02;
+        camera.position.y += (-ny * 6 - camera.position.y) * 0.02;
+      });
+    }
+
+    function setTheme(name){
+      if (!themes[name]) name = 'molten';
+      currentTheme = name;
+      // update bloom
+      const bloom = scene.userData.bloomPass;
+      if (bloom) {
+        bloom.strength = themes[name].bloom.strength;
+        bloom.radius = themes[name].bloom.radius;
+        bloom.threshold = themes[name].bloom.threshold;
+      }
+      // update particle base colors (force a refresh)
+      updateParticleColorsAndSizes();
+    }
+
+    function updateParticleColorsAndSizes(){
+      if (!particles) return;
+      const pCols = particles.geometry.attributes.color.array;
+      const pSizes = particles.geometry.attributes.size.array;
+      for (let i=0;i<particleCount;i++){
+        const attrs = getAttributesForParticle(i);
+        pCols[i*3] = attrs.color.r;
+        pCols[i*3+1] = attrs.color.g;
+        pCols[i*3+2] = attrs.color.b;
+        pSizes[i] = attrs.size;
+      }
+      particles.geometry.attributes.color.needsUpdate = true;
+      particles.geometry.attributes.size.needsUpdate = true;
+    }
+
+    function onResize(){
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      composer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    // main loop
+    function animate(){
+      requestAnimationFrame(animate);
+      time += 0.02;
+      controls.update();
+      if (isAnimationEnabled) animateParticles();
+      composer.render();
+    }
+
+    // start
+    init();
+
+  </script>
+</body>
+  </html>
